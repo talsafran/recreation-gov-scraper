@@ -16,7 +16,7 @@ DATE_PARAMS = "start_date=2018-11-09T00%3A00%3A00.000Z&end_date=2018-11-11T00%3A
 
 VERBOSE = false
 
-SLEEP_TIME = 3
+SLEEP_TIME = 10
 
 def campground_urls
   CAMPGROUND_IDS.map do |campground_id|
@@ -52,9 +52,7 @@ loop do
         output << "#{date} - #{reservation_status}  "
 
         unless RESERVED_LABELS.include?(reservation_status)
-          50.times do
-            puts "OMG IT IS AVAILABLE!"
-          end
+          puts "OMG IT IS AVAILABLE! #{url}"
         end
       end
 
