@@ -5,14 +5,16 @@ CAMPGROUND_IDS = [
   232449, # North Pines (https://www.recreation.gov/camping/campgrounds/232449)
   232447, # Upper Pines (https://www.recreation.gov/camping/campgrounds/232447/availability)
 ].freeze
+START_DATE = "2019-05-03"
+END_DATE = "2019-05-06"
+
+BASE_URL = "https://www.recreation.gov/api/camps/availability/campground"
 
 RESERVED_LABELS = [
   "Reserved",
   "Not Available"
 ].freeze
 
-BASE_URL = "https://www.recreation.gov/api/camps/availability/campground"
-DATE_PARAMS = "start_date=2018-11-09T00%3A00%3A00.000Z&end_date=2018-11-11T00%3A00%3A00.000Z"
 
 VERBOSE = false
 
@@ -25,11 +27,18 @@ def campground_urls
 end
 
 def campground_url(id)
-  "#{BASE_URL}/#{id}?#{DATE_PARAMS}"
+  "#{BASE_URL}/#{id}?#{date_params}"
 end
 
 def campground_availability_url
   "#{BASE_URL}/#{id}/availability"
+end
+
+def date_params
+  start_date="#{START_DATE}T00%3A00%3A00.000Z"
+  end_date="#{END_DATE}T00%3A00%3A00.000Z"
+
+  "start_date=#{start_date}&end_date=#{end_date}"
 end
 
 def verbose?
