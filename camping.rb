@@ -1,10 +1,12 @@
 require 'httparty'
 require 'pry'
 
-CAMPGROUND_IDS = [
-  232449, # North Pines (https://www.recreation.gov/camping/campgrounds/232449)
-  232447, # Upper Pines (https://www.recreation.gov/camping/campgrounds/232447/availability)
-].freeze
+CAMPGROUND_IDS = {
+  "North Pines" => 232449, # North Pines:   https://www.recreation.gov/camping/campgrounds/232449
+  "Upper Pines" => 232447, # Upper Pines:   https://www.recreation.gov/camping/campgrounds/232447
+  "Hogdon Meadow" => 232451, # Hogdon Meadow: https://www.recreation.gov/camping/campgrounds/232451
+}
+
 START_DATE = "2019-05-03"
 END_DATE = "2019-05-06"
 
@@ -15,14 +17,13 @@ RESERVED_LABELS = [
   "Not Available"
 ].freeze
 
-
-VERBOSE = false
+VERBOSE = true
 
 SLEEP_TIME = 10
 
 def campground_urls
-  CAMPGROUND_IDS.map do |campground_id|
-    campground_url(campground_id)
+  CAMPGROUND_IDS.map do |name, id|
+    campground_url(id)
   end
 end
 
@@ -45,10 +46,10 @@ def verbose?
   VERBOSE
 end
 
-loop do 
+loop do
   print '.'
 
-  campground_urls.each do |url| 
+  campground_urls.each do |url|
     response = HTTParty.get(url)
 
     response['campsites'].each do |campsite|
@@ -57,7 +58,7 @@ loop do
       campsite[1]['availabilities'].each do |availability_hash|
         date = availability_hash[0]
         reservation_status = availability_hash[1]
-        
+
         output << "#{date} - #{reservation_status}  "
 
         unless RESERVED_LABELS.include?(reservation_status)
